@@ -1,0 +1,121 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(cuid())
+  email     String   @unique
+  password  String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  profile Profile?
+}
+
+model Profile {
+  id     String @id @default(uuid())
+  userId String @unique
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  name   String?
+  age    Int
+  sex    String
+  weight Float
+  height Float
+
+  goal          String
+  activityLevel String
+  trainingYears Float
+  weeklyWorkouts Int
+
+  muscleMass String
+  fatLevel   String
+
+  targetCalories Int
+  targetProtein  Float
+  targetCarbs    Float
+  targetFat      Float
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  mealLogs   MealLog[]
+  weightLogs WeightLog[]
+}
+
+model FoodItem {
+  id    String  @id @default(uuid())
+  name  String
+  brand String?
+
+  calories Float
+  protein  Float
+  carbs    Float
+  fat      Float
+  fiber    Float?
+
+  servingSize Float?
+  servingName String?
+
+  isVerified Boolean @default(false)
+
+  createdAt DateTime @default(now())
+
+  mealLogItems MealLogItem[]
+
+  @@index([name])
+}
+
+model MealLog {
+  id        String  @id @default(uuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  date     DateTime @db.Date
+  mealType String
+
+  items MealLogItem[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId, date])
+}
+
+model MealLogItem {
+  id        String  @id @default(uuid())
+  mealLogId String
+  mealLog   MealLog @relation(fields: [mealLogId], references: [id], onDelete: Cascade)
+
+  foodItemId String
+  foodItem   FoodItem @relation(fields: [foodItemId], references: [id])
+
+  quantity Float
+
+  calories Float
+  protein  Float
+  carbs    Float
+  fat      Float
+
+  createdAt DateTime @default(now())
+
+  @@index([mealLogId])
+}
+
+model WeightLog {
+  id        String  @id @default(uuid())
+  profileId String
+  profile   Profile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  date   DateTime @db.Date
+  weight Float
+
+  createdAt DateTime @default(now())
+
+  @@unique([profileId, date])
+  @@index([profileId, date])
+}
