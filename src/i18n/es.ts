@@ -5,6 +5,7 @@ export const es = {
     progress: "Progreso",
     settings: "Ajustes",
     signOut: "Cerrar sesión",
+    recipes: "Recetas",
   },
   log: {
     title: "Registro de alimentos",

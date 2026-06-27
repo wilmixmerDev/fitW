@@ -5,7 +5,7 @@ import { usePathname } from "next/navigation"
 import { signOut } from "next-auth/react"
 import { motion } from "motion/react"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, BookOpen, TrendingUp, Settings, LogOut, Leaf } from "lucide-react"
+import { LayoutDashboard, BookOpen, TrendingUp, Settings, LogOut, Leaf, ChefHat } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import { useT } from "@/contexts/language-context"
 
@@ -16,6 +16,7 @@ export function Sidebar() {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
     { href: "/log", icon: BookOpen, label: t.nav.log },
+    { href: "/recipes", icon: ChefHat, label: t.nav.recipes },
     { href: "/progress", icon: TrendingUp, label: t.nav.progress },
     { href: "/settings", icon: Settings, label: t.nav.settings },
   ]

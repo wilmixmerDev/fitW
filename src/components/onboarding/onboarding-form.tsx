@@ -218,7 +218,7 @@ function Step5({ data, onChange }: StepProps) {
         <div className="space-y-2">
           <Label>Workouts per week</Label>
           <div className="grid grid-cols-4 gap-2">
-            {[0, 2, 3, 4, 5, 6, 7].map((n) => (
+            {[0, 1, 2, 3, 4, 5, 6, 7].map((n) => (
               <OptionButton
                 key={n}
                 selected={data.weeklyWorkouts === n}

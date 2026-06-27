@@ -7,6 +7,7 @@ export const en: Translations = {
     progress: "Progress",
     settings: "Settings",
     signOut: "Sign out",
+    recipes: "Recipes",
   },
   log: {
     title: "Food Log",

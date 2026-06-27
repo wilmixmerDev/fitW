@@ -45,6 +45,35 @@ model Profile {
 
   mealLogs   MealLog[]
   weightLogs WeightLog[]
+  recipes    Recipe[]
+}
+
+model Recipe {
+  id        String   @id @default(uuid())
+  profileId String
+  profile   Profile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+
+  name         String
+  cookedWeight Float?
+
+  ingredients RecipeIngredient[]
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([profileId])
+}
+
+model RecipeIngredient {
+  id       String @id @default(uuid())
+  recipeId String
+  recipe   Recipe @relation(fields: [recipeId], references: [id], onDelete: Cascade)
+
+  foodItemId    String
+  foodItem      FoodItem @relation(fields: [foodItemId], references: [id])
+  quantityGrams Float
+
+  @@index([recipeId])
 }
 
 model FoodItem {
@@ -65,7 +94,8 @@ model FoodItem {
 
   createdAt DateTime @default(now())
 
-  mealLogItems MealLogItem[]
+  mealLogItems        MealLogItem[]
+  recipeIngredients   RecipeIngredient[]
 
   @@index([name])
 }

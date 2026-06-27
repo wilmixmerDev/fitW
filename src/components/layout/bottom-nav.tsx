@@ -3,7 +3,7 @@
 import Link from "next/link"
 import { usePathname } from "next/navigation"
 import { cn } from "@/lib/utils"
-import { LayoutDashboard, BookOpen, TrendingUp, Settings } from "lucide-react"
+import { LayoutDashboard, BookOpen, TrendingUp, Settings, ChefHat } from "lucide-react"
 import { useT } from "@/contexts/language-context"
 
 export function BottomNav() {
@@ -13,6 +13,7 @@ export function BottomNav() {
   const navItems = [
     { href: "/dashboard", icon: LayoutDashboard, label: t.nav.dashboard },
     { href: "/log", icon: BookOpen, label: t.nav.log },
+    { href: "/recipes", icon: ChefHat, label: t.nav.recipes },
     { href: "/progress", icon: TrendingUp, label: t.nav.progress },
     { href: "/settings", icon: Settings, label: t.nav.settings },
   ]

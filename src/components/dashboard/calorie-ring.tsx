@@ -1,25 +1,28 @@
 "use client"
 
 import { motion } from "motion/react"
+import { Flame } from "lucide-react"
 
 interface CalorieRingProps {
   consumed: number
   target: number
+  neatBonus?: number
 }
 
 function fmt(n: number) {
   return String(Math.round(n)).replace(/\B(?=(\d{3})+(?!\d))/g, ",")
 }
 
-export function CalorieRing({ consumed, target }: CalorieRingProps) {
-  const pct = Math.min(consumed / target, 1)
+export function CalorieRing({ consumed, target, neatBonus = 0 }: CalorieRingProps) {
+  const adjustedTarget = target + neatBonus
+  const pct = Math.min(consumed / adjustedTarget, 1)
   const radius = 70
   const stroke = 10
   const normalizedR = radius - stroke / 2
   const circumference = 2 * Math.PI * normalizedR
   const dashOffset = circumference * (1 - pct)
-  const remaining = Math.max(target - consumed, 0)
-  const over = consumed > target
+  const remaining = Math.max(adjustedTarget - consumed, 0)
+  const over = consumed > adjustedTarget
 
   return (
     <div className="flex flex-col items-center gap-4">
@@ -56,12 +59,14 @@ export function CalorieRing({ consumed, target }: CalorieRingProps) {
 
       <div className="grid grid-cols-3 gap-4 text-center w-full max-w-xs">
         <div>
-          <p className="text-2xl font-bold tabular-nums">{fmt(target)}</p>
-          <p className="text-xs text-muted-foreground">Meta</p>
+          <p className="text-2xl font-bold tabular-nums">{fmt(adjustedTarget)}</p>
+          <p className="text-xs text-muted-foreground">
+            Meta{neatBonus > 0 && <span className="text-primary ml-1">+{fmt(neatBonus)}</span>}
+          </p>
         </div>
         <div className="border-x border-border">
           <p className={`text-2xl font-bold tabular-nums ${over ? "text-destructive" : "text-primary"}`}>
-            {over ? `+${fmt(consumed - target)}` : fmt(remaining)}
+            {over ? `+${fmt(consumed - adjustedTarget)}` : fmt(remaining)}
           </p>
           <p className="text-xs text-muted-foreground">{over ? "Extra" : "Quedan"}</p>
         </div>
@@ -70,6 +75,17 @@ export function CalorieRing({ consumed, target }: CalorieRingProps) {
           <p className="text-xs text-muted-foreground">Hecho</p>
         </div>
       </div>
+
+      {neatBonus > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: 4 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="flex items-center gap-1.5 text-xs text-primary bg-primary/10 px-3 py-1.5 rounded-full"
+        >
+          <Flame className="w-3 h-3" />
+          <span>+{fmt(neatBonus)} kcal de actividad extra hoy</span>
+        </motion.div>
+      )}
     </div>
   )
 }
