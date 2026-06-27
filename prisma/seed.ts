@@ -78,22 +78,12 @@ const foods = [
 
 async function main() {
   console.log("Seeding food database...")
-
-  for (const food of foods) {
-    await prisma.foodItem.upsert({
-      where: { id: food.name },
-      update: {},
-      create: {
-        id: food.name,
-        ...food,
-      },
-    })
+  const existing = await prisma.foodItem.count()
+  if (existing > 0) {
+    console.log(`Already seeded (${existing} items). Skipping.`)
+    return
   }
-
-  // Use name-based upsert via findFirst + create
-  await prisma.foodItem.deleteMany({})
   await prisma.foodItem.createMany({ data: foods })
-
   console.log(`Seeded ${foods.length} food items.`)
 }
 
